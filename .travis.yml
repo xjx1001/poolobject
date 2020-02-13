@@ -1,5 +1,6 @@
 language: java
-install: ant deps
+before_script:
+  - sudo apt-get install ant-optional
 after_success:
   - bash <(curl -s https://codecov.io/bash)
 jdk:
