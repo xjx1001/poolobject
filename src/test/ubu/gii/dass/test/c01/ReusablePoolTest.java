@@ -9,6 +9,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import ubu.gii.dass.c01.NotFreeInstanceException;
 import ubu.gii.dass.c01.ReusablePool;
 
 /**
@@ -50,7 +51,11 @@ public class ReusablePoolTest {
 	 */
 	@Test
 	public void testAcquireReusable() {
-		fail("Not yet implemented");
+		try {
+			this.reusablePool.acquireReusable();
+		} catch (NotFreeInstanceException e) {
+			fail("Salta la excepcion");
+		}
 	}
 
 	/**
