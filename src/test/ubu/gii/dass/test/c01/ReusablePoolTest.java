@@ -72,5 +72,12 @@ public class ReusablePoolTest {
 			fail("Salta la excepcion");
 		}
 	}
-
+	
+	@Test(expected = NotFreeInstanceException.class)
+	public void testNotFreeInstanceException() throws NotFreeInstanceException {
+		ReusablePool pool = ReusablePool.getInstance();
+		pool.acquireReusable();
+		pool.acquireReusable();
+		pool.acquireReusable();
+	}
 }
