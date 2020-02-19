@@ -5,6 +5,9 @@ package ubu.gii.dass.test.c01;
 
 import static org.junit.Assert.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -22,6 +25,7 @@ public class ReusablePoolTest {
 	
 	private ReusablePool reusablePool;
 	private Reusable reusable;
+	private List<Reusable> reusables;
 
 	/**
 	 * @throws java.lang.Exception
@@ -30,6 +34,7 @@ public class ReusablePoolTest {
 	public void setUp() throws Exception {
 		reusablePool = ReusablePool.getInstance();
 		reusable = null;
+		reusables = new ArrayList<>();
 	}
 
 	/**
@@ -37,6 +42,9 @@ public class ReusablePoolTest {
 	 */
 	@After
 	public void tearDown() throws Exception {
+		for (Reusable reusable : reusables) {
+			reusablePool.releaseReusable(reusable);
+		}
 	}
 
 	/**
@@ -76,8 +84,16 @@ public class ReusablePoolTest {
 	@Test(expected = NotFreeInstanceException.class)
 	public void testNotFreeInstanceException() throws NotFreeInstanceException {
 		ReusablePool pool = ReusablePool.getInstance();
-		pool.acquireReusable();
-		pool.acquireReusable();
-		pool.acquireReusable();
+		reusables.add(pool.acquireReusable());
+		reusables.add(pool.acquireReusable());
+		reusables.add(pool.acquireReusable());
+	}
+	
+	@Test(expected = DuplicatedInstanceException.class)
+	public void testDuplicatedInstanceException() throws NotFreeInstanceException, DuplicatedInstanceException {
+		ReusablePool pool = ReusablePool.getInstance();
+		Reusable reusable = pool.acquireReusable();
+		pool.releaseReusable(reusable);
+		pool.releaseReusable(reusable);
 	}
 }
